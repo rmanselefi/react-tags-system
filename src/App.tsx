@@ -21,9 +21,10 @@ const App: React.FC = () => {
   const OPERANDS = ["+", "-", "*", "(", ")", "^", "/"];
   type QueryKey = [string, string]; // [key, input]
 
-
   const fetchSuggestions = async () => {
-    const response = await fetch('https://652f91320b8d8ddac0b2b62b.mockapi.io/autocomplete');
+    const response = await fetch(
+      "https://652f91320b8d8ddac0b2b62b.mockapi.io/autocomplete"
+    );
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
@@ -33,7 +34,16 @@ const App: React.FC = () => {
   // This function gets the term after the last operand (or the full string if no operand exists)
   const getLastTerm = (inputString: string) => {
     const terms = inputString.split(/[\+\-\*\(\)\^\/]+/); // split by operands
-    return terms[terms.length - 1].trim();
+    const termas = terms[terms.length - 1].trim();
+    console.log("termas === >", termas);
+    return termas;
+  };
+
+  const handleDelete = (optionToDelete: string) => {
+    const tagToRemove = tags.find((tag) => tag.name === optionToDelete);
+    if (tagToRemove) {
+      removeTag(tagToRemove.id);
+    }
   };
 
   // Use react-query to fetch suggestions based on the last term
@@ -87,6 +97,7 @@ const App: React.FC = () => {
                 label={option}
                 {...getTagProps({ index })}
                 deleteIcon={<CloseIcon />}
+                onDelete={() => handleDelete(option)}
               />
             ))
           }
